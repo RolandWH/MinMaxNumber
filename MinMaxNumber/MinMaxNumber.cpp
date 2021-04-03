@@ -1,7 +1,7 @@
 /* File:    MinMaxNumber.cpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Returns the smallest and biggest number in a list 
-   License: GNU GPLv3 (./LICENSE) 
+   License: GNU GPLv3 (../LICENSE) 
 */
 #include <algorithm>
 #include <iostream>
