@@ -1,7 +1,7 @@
 /* File:    StringHandling.h
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Includes functions for handling strings (formating, etc...)
-   License: GNU GPLv3 (./LICENSE)
+   License: GNU GPLv3 (../LICENSE)
 */
 #pragma once
 
