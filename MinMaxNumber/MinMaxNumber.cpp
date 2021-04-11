@@ -1,12 +1,13 @@
 /* File:    MinMaxNumber.cpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
-   Desc:    Returns the smallest and biggest number in a list 
+   Desc:    Returns the smallest and biggest number in an SQL column
    License: GNU GPLv3 (../LICENSE) 
 */
 
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
+#include <cxxopts.hpp>
 #include <algorithm>
 #include <Windows.h>
 #include <iostream>
@@ -15,30 +16,48 @@
 #include "SQLHandler.h"
 
 
-int main(int argc, char* argv[]) {
-    // Parse console arguments
-    std::string url;
-    std::string user;
-    std::string pass;
-    std::string db;
-    std::string table;
-    std::string column;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (argc < 7) {
+int main(int argc, char** argv) {
+    // Parse command line arguments and options using cxxopts
+    cxxopts::Options options("MinMaxNumber", "Sort numbers in a MySQl table");
+    options.add_options()
+        ("h,help", "Show help page")
+        ("a,address", "MySQl server address", cxxopts::value<std::string>())
+        ("u,user", "MySQL server username", cxxopts::value<std::string>())
+        ("p,password", "MySQL user password", cxxopts::value<std::string>())
+        ("d,database", "MySQL database name", cxxopts::value<std::string>())
+        ("t,table", "MySQL table name", cxxopts::value<std::string>())
+        ("c,column", "MySQL table column name", cxxopts::value<std::string>());
+    auto result = options.parse(argc, argv);
+
+    if (result.count("help")) {
+        std::cout << "MinMaxNumber - Sort numbers in a MySQL table\n"
+            << "USAGE:\n\n"
+            << "-h, --help\n\tShow this help page\n"
+            << "-a, --address\n\tThe ip adress of the desired MySQL server\n"
+            << "-u, --user\n\tThe name of a user in your server\n"
+            << "-p, --password\n\tThe password of your chosen MySQL user\n"
+            << "-d, --database\n\tThe name of a database in your MySQL server\n"
+            << "-t, --table\n\tThe name of a table in your MySQL database\n"
+            << "-c, --column\n\tThe name of a column in your MySQL table\n";
+        return EXIT_SUCCESS;
+    }
+
+    if (argc < 13) {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 4);
         std::cout << "ERROR: Not enough arguments" << std::endl;
         SetConsoleTextAttribute(hConsole, 7);
-        std::cout << "Correct argument order is: ";
-        std::cout << "<url> <username> <password> <database> <table> <column>";
+        std::cout << "See help (-h, --help) for correct usage";
         return EXIT_FAILURE;
-    } else {
-        url     = argv[1];
-        user    = argv[2];
-        pass    = argv[3];
-        db      = argv[4];
-        table   = argv[5];
-        column  = argv[6];
     }
+
+    std::string url     = result["addres"].as<std::string>();
+    std::string user    = result["user"].as<std::string>();
+    std::string pass    = result["password"].as<std::string>();
+    std::string db      = result["database"].as<std::string>();
+    std::string table   = result["table"].as<std::string>();
+    std::string column  = result["column"].as<std::string>();
+    
 
     // Try and connect to MySQL server using details user provided
     if (!SQLConnect(url, user, pass, db)) {
@@ -64,7 +83,5 @@ int main(int argc, char* argv[]) {
     std::cout << "The biggest number in your column is ";
     std::cout << biggest << std::endl;
 
-    // In Windows, pause command gives user a chance to read results and quit
-    system("pause");
     return EXIT_SUCCESS;
 }

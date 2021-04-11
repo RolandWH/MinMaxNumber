@@ -3,10 +3,11 @@
    Desc:    Contains functions for connecting to and reading from an SQL server
    License: GNU GPLv3 (../LICENSE)
 */
+
+#include <mysql/jdbc.h>
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <mysql/jdbc.h>
 #include "SQLHandler.h"
 
 sql::Connection* con;
@@ -14,7 +15,6 @@ sql::Connection* con;
 // Connect to SQl server+database
 bool SQLConnect(std::string url, std::string user, std::string pass, std::string db) {
     try {
-        // Try and connect to database
         sql::Driver* driver = get_driver_instance();
         con = driver->connect(url, user, pass);
         con->setSchema(db);
