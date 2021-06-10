@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <Windows.h>
 #include <iostream>
+#include <numeric>
 #include <string>
 #include <vector>
 #include "SQLHandler.h"
@@ -46,12 +47,12 @@ int main(int argc, char** argv) {
             std::cout << "MinMaxNumber - Sort numbers in a MySQL table\n"
                 << "USAGE:\n\n"
                 << "-h, --help\n\tShow this help page\n"
-                << "-a, --address\n\tThe ip adress of the desired MySQL server\n"
+                << "-a, --address\n\tThe ip address of the desired SQL server\n"
                 << "-u, --user\n\tThe name of a user in your server\n"
-                << "-p, --password\n\tThe password of your chosen MySQL user\n"
-                << "-d, --database\n\tThe name of a database in your MySQL server\n"
-                << "-t, --table\n\tThe name of a table in your MySQL database\n"
-                << "-c, --column\n\tThe name of a column in your MySQL table\n";
+                << "-p, --password\n\tThe password of your chosen SQL user\n"
+                << "-d, --database\n\tThe name of a database in a SQL server\n"
+                << "-t, --table\n\tThe name of a table in a SQL database\n"
+                << "-c, --column\n\tThe name of a column in a SQL table\n";
             return EXIT_SUCCESS;
         }
 
@@ -83,13 +84,18 @@ int main(int argc, char** argv) {
         smallest = std::min(smallest, numList[i]);
         biggest = std::max(biggest, numList[i]);
     }
-
+    int sum = std::accumulate(numList.begin(), numList.end(), 0);
+    int avg = sum / numList.size();
 
     // Output results
     std::cout << "The smallest number in your column is ";
     std::cout << smallest << std::endl;
     std::cout << "The biggest number in your column is ";
     std::cout << biggest << std::endl;
+    std::cout << "The average of all the numbers in your column is ";
+    std::cout << avg << std::endl;
+    std::cout << "The total of all the numbers in your column is ";
+    std::cout << sum << std::endl;
 
     return EXIT_SUCCESS;
 }
