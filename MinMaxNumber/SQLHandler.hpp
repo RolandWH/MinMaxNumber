@@ -5,6 +5,9 @@
 */
 #pragma once
 
+#include <string>
+#include <vector>
+
 // Connect to SQl server+database
 bool SQLConnect(std::string url, std::string user, std::string pass, std::string db);
 

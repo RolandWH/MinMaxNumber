@@ -4,13 +4,13 @@
    License: GNU GPLv3 (../LICENSE)
 */
 
+#include "SQLHandler.hpp"
+#include "mysql/jdbc.h"
+#include "w32_colour.hpp"
+
 #include <string>
 #include <sstream>
 #include <vector>
-
-//#include "SQLHandler.h"
-#include "mysql/jdbc.h"
-#include "w32_colour.hpp"
 
 
 sql::Connection* con;

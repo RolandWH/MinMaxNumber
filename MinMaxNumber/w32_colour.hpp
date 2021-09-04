@@ -22,9 +22,10 @@
 #define LIGHT_YELLOW 0xE
 #define BRIGHT_WHITE 0xF
 
+#include <Windows.h>
 #include <string>
 #include <iostream>
-#include <Windows.h>
+
 
 static void ChangeColour(std::string s, int bg, int fg, bool revert)
 {

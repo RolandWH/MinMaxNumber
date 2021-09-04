@@ -7,20 +7,22 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
-#include <string>
-#include <string.h>
-#include <iostream>
-#include <cstdlib>
-#include <sstream>
-#include <vector>
-#include <climits>
-#include <cstddef>
-#include <algorithm>
-#include <numeric>
-
 #include "w32_colour.hpp"
 #include "cxxopts.hpp"
 #include "SQLHandler.hpp"
+
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+#include <string.h>
+#include <cstdlib>
+#include <climits>
+#include <cstddef>
+
 
 int main(int argc, char** argv)
 {
