@@ -63,7 +63,7 @@ Finally we assign the strings we created earlier to the values cxxopts obtained 
 #### 1 (i).
 For this we simply checked the size of argc (an interger provided by C++ telling you how many argument have benn passed to the program). If it is less than the required amount of arguments and the user has not requested to see the help page, an error is shown.
 
-<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/not_enough_arguments?raw=true"/>
+<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/not_enough_arguments.png?raw=true"/>
 
 ```cpp
 } catch (const cxxopts::OptionException& e) {
@@ -73,7 +73,7 @@ For this we simply checked the size of argc (an interger provided by C++ telling
 ```
 If cxxopts encounters an unknown argument an error will be thrown telling the user what the offending argument is.
 
-<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/incorrect_argument?raw=true"/>
+<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/incorrect_argument.png?raw=true"/>
 
 #### 1 (ii).
 ```cpp
@@ -84,7 +84,7 @@ if (result.count("help")) {
 ```
 We use a cxxopts function to check whether the help page was requested by the user, if it was we print it and exit.
 
-<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/help_page?raw=true"/>
+<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/help_page.png?raw=true"/>
 
 #### 2.
 For this part of the program we switch to using the seperate *SQLHandler.cpp* file. It contains two functions: one for connecting to the database and another for returning the numbers contained in a specified column.
@@ -101,7 +101,7 @@ if (!SQLConnect(url, user, pass, db)) {
 ```
 Back in the main file we call the *SQLConnect* function, which is a boolean function that attempts to connect to the SQL database. It will either return true or false depending on whether the connection was sucsessful or not. If there is an error connecting to the database an error will be shown. There are many different types of errors that could be displayed, pictured below is an error you get if an incorrect database name is provided. The other errors take the same format but with different descriptions and error codes.
 
-<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/incorrect_databse?raw=true"/>
+<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/incorrect_databse.png?raw=true"/>
 
 #### 3.
 `std::vector<int> numList = FetchColumns(table, column);`
@@ -139,5 +139,5 @@ First of all, if all our previous calculations are zero then we display a warnin
 | Japan          | 126,860,301   |
 | Russia         | 145,872,256   |
 
-<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/population_output?raw=true"/>
+<img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/population_output.png?raw=true"/>
 
