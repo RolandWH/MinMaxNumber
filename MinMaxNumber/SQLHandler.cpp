@@ -4,25 +4,38 @@
    License: GNU GPLv3 (../LICENSE)
 */
 
-#include <mysql/jdbc.h>
-#include <iostream>
+#include <string>
 #include <sstream>
 #include <vector>
-#include "SQLHandler.h"
+
+//#include "SQLHandler.h"
+#include "mysql/jdbc.h"
+#include "w32_colour.hpp"
+
 
 sql::Connection* con;
 
 // Connect to SQl server+database
-bool SQLConnect(std::string url, std::string user, std::string pass, std::string db) {
-    try {
+bool SQLConnect(std::string url, std::string user, std::string pass, std::string db)
+{
+    try
+    {
         sql::Driver* driver = get_driver_instance();
         con = driver->connect(url, user, pass);
         con->setSchema(db);
-    } catch (sql::SQLException &err) {
+    } catch (sql::SQLException &err)
+    {
         // Error handling
-        std::cout << "# ERR: " << err.what();
-        std::cout << " (MySQL error code: " << err.getErrorCode();
-        std::cout << ", SQLState: " << err.getSQLState() << " )" << std::endl;
+        std::stringstream errS;
+        errS << "ERROR: " << err.what();
+        errS << " (MySQL error code: " << err.getErrorCode();
+        if (err.getSQLState() != "")
+        {
+            errS << ", SQLState: " << err.getSQLState() << ")";
+        }
+        else { errS << ')'; }
+        
+        ChangeColour(errS.str(), BLACK, RED, true);
         return false;
     }
     return true;
@@ -30,21 +43,36 @@ bool SQLConnect(std::string url, std::string user, std::string pass, std::string
 
 
 // Return numbers in a column into vector
-std::vector<int> FetchColumns(std::string table, std::string column) {
+std::vector<int> FetchColumns(std::string table, std::string column)
+{
     std::vector<int> numList;
     sql::Statement* stmt;
     sql::ResultSet* res;
     stmt = con->createStatement();
     std::stringstream queryString;
     queryString << "SELECT " << column << " FROM " << table;
-    res = stmt->executeQuery(queryString.str());
-    while (res->next()) {
-        numList.push_back(res->getInt(1));
+
+    try
+    {
+        res = stmt->executeQuery(queryString.str());
+        while (res->next())
+        {
+            numList.push_back(res->getInt(1));
+        }
+        delete res;
+    }
+    catch (const sql::SQLException&)
+    {
+        ChangeColour(
+            "ERROR: The names provided for the table and column are not correct",
+            BLACK,
+            RED,
+            true
+        );
+        exit(EXIT_FAILURE);
     }
 
-    delete res;
     delete stmt;
     delete con;
-
     return numList;
 }

@@ -7,31 +7,36 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
-#include <cxxopts.hpp>
-#include <algorithm>
-#include <Windows.h>
-#include <iostream>
-#include <numeric>
 #include <string>
+#include <string.h>
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include <vector>
-#include "SQLHandler.h"
+#include <climits>
+#include <cstddef>
+#include <algorithm>
+#include <numeric>
 
+#include "w32_colour.hpp"
+#include "cxxopts.hpp"
+#include "SQLHandler.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     std::string url, user, pass, db, table, column;
-
-    // Check if user has entered enough arguments
-    if ((!argv[1]) || (argc < 13 && strcmp(argv[1], "-h") != 0 && strcmp(argv[1], "--help") != 0)) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, 4);
-        std::cout << "ERROR: Not enough arguments" << std::endl;
-        SetConsoleTextAttribute(hConsole, 7);
-        std::cout << "See help (-h, --help) for correct usage";
+ 
+    // Terrible code for checking if user has entered enough arguments
+    if (!argv[1] || argc < 13 && strcmp(argv[1], "-h") != 0 && strcmp(argv[1], "--help") != 0)
+    {
+        ChangeColour("ERROR: Not enough arguments", BLACK, RED, true);
+        std::cout << "See help (-h, --help) for correct usage\n";
         return EXIT_FAILURE;
     }
 
     // Parse command line arguments and options using cxxopts
-    try {
+    try
+    {
         cxxopts::Options options("MinMaxNumber", "Sort numbers in a MySQl table");
         options.add_options()
             ("h,help", "Show help page")
@@ -43,7 +48,8 @@ int main(int argc, char** argv) {
             ("c,column", "MySQL table column name", cxxopts::value<std::string>());
         auto result = options.parse(argc, argv);
 
-        if (result.count("help")) {
+        if (result.count("help"))
+        {
             std::cout << "MinMaxNumber - Sort numbers in a MySQL table\n"
                 << "USAGE:\n\n"
                 << "-h, --help\n\tShow this help page\n"
@@ -62,40 +68,49 @@ int main(int argc, char** argv) {
         db      = result["database"].as<std::string>();
         table   = result["table"].as<std::string>();
         column  = result["column"].as<std::string>();
-    } catch (const cxxopts::OptionException& e) {
-        std::cout << "Error parsing options: " << e.what() << std::endl;
+    } catch (const cxxopts::OptionException& e)
+    {
+        std::stringstream optErr;
+        optErr << "ERROR: " << e.what();
+        ChangeColour(optErr.str(), BLACK, RED, true);
         return EXIT_FAILURE;
     }
     
-
     // Try and connect to MySQL server using details user provided
-    if (!SQLConnect(url, user, pass, db)) {
-        return EXIT_FAILURE;
-    }
-    
+    if (!SQLConnect(url, user, pass, db)) return EXIT_FAILURE;
+
     // If connection was sucessful fetch the numbers in the requested column
     std::vector<int> numList = FetchColumns(table, column);
-
 
     // Find smallest and biggest numbers in numList
     int smallest = INT_MAX;
     int biggest = NULL;
-    for (std::vector<int>::size_type i = 0; i < numList.size(); i++) {
+    for (std::vector<int>::size_type i = 0; i < numList.size(); i++)
+    {
         smallest = std::min(smallest, numList[i]);
         biggest = std::max(biggest, numList[i]);
     }
     int sum = std::accumulate(numList.begin(), numList.end(), 0);
-    int avg = sum / numList.size();
+    std::vector<int>::size_type avg = sum / numList.size();
 
     // Output results
+    if (!smallest && !biggest && !avg && !sum)
+    {
+        ChangeColour(
+            "WARNING: All outputs are zero, does provided column contain intergers?",
+            BLACK,
+            YELLOW,
+            true
+        );
+    }
     std::cout << "The smallest number in your column is ";
-    std::cout << smallest << std::endl;
+    std::cout << smallest << '\n';
     std::cout << "The biggest number in your column is ";
-    std::cout << biggest << std::endl;
-    std::cout << "The average of all the numbers in your column is ";
-    std::cout << avg << std::endl;
+    std::cout << biggest << '\n';
     std::cout << "The total of all the numbers in your column is ";
-    std::cout << sum << std::endl;
+    std::cout << sum << '\n';
+    std::cout << "The average of all the numbers in your column is ";
+    std::cout << avg << '\n';
 
     return EXIT_SUCCESS;
 }
