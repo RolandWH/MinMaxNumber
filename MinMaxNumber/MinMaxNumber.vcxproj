@@ -63,7 +63,7 @@
   <ItemGroup>
     <ClInclude Include="cxxopts.hpp" />
     <ClInclude Include="SQLHandler.hpp" />
-    <ClInclude Include="w32_colour.hpp" />
+    <ClInclude Include="w32_colour.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

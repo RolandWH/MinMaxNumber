@@ -6,7 +6,7 @@
 
 #include "SQLHandler.hpp"
 #include "mysql/jdbc.h"
-#include "w32_colour.hpp"
+#include "w32_colour.h"
 
 #include <string>
 #include <sstream>
@@ -33,9 +33,9 @@ bool SQLConnect(std::string url, std::string user, std::string pass, std::string
         {
             errS << ", SQLState: " << err.getSQLState() << ")";
         }
-        else { errS << ')'; }
+        else errS << ')';
         
-        ChangeColour(errS.str(), BLACK, RED, true);
+        ChangeColour(errS.str().c_str(), BLACK, RED, true);
         return false;
     }
     return true;

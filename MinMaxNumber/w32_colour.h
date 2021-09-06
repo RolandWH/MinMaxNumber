@@ -23,11 +23,10 @@
 #define BRIGHT_WHITE 0xF
 
 #include <Windows.h>
-#include <string>
-#include <iostream>
+#include <stdio.h>
 
 
-static void ChangeColour(std::string s, int bg, int fg, bool revert)
+static void ChangeColour(const char* msg, int bg, int fg, bool revert)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO info;
@@ -35,6 +34,6 @@ static void ChangeColour(std::string s, int bg, int fg, bool revert)
     int prevC = info.wAttributes;
 
     SetConsoleTextAttribute(hConsole, (fg + (bg * 16)));
-    std::cout << s << '\n';
-    if (revert) { SetConsoleTextAttribute(hConsole, prevC); }
+    printf("%s\n", msg);
+    if (revert) SetConsoleTextAttribute(hConsole, prevC);
 }

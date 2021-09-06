@@ -7,7 +7,7 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
-#include "w32_colour.hpp"
+#include "w32_colour.h"
 #include "cxxopts.hpp"
 #include "SQLHandler.hpp"
 
@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <numeric>
 
-#include <string.h>
+#include <cstring>
 #include <cstdlib>
 #include <climits>
 #include <cstddef>
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     {
         std::stringstream optErr;
         optErr << "ERROR: " << e.what();
-        ChangeColour(optErr.str(), BLACK, RED, true);
+        ChangeColour(optErr.str().c_str(), BLACK, RED, true);
         return EXIT_FAILURE;
     }
     

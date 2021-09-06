@@ -26,7 +26,7 @@
     <ClInclude Include="SQLHandler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="w32_colour.hpp">
+    <ClInclude Include="w32_colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cxxopts.hpp">
