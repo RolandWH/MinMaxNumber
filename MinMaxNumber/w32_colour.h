@@ -22,6 +22,7 @@
 #define LIGHT_YELLOW 0xE
 #define BRIGHT_WHITE 0xF
 
+#include <stdbool.h>
 #include <Windows.h>
 #include <stdio.h>
 
