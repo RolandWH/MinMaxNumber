@@ -6,7 +6,7 @@
 
 #include "SQLHandler.hpp"
 #include "mysql/jdbc.h"
-#include "w32_colour.h"
+#include "colour.h"
 
 #include <string>
 #include <sstream>
@@ -35,7 +35,7 @@ bool SQLConnect(std::string url, std::string user, std::string pass, std::string
         }
         else errS << ')';
         
-        ChangeColour(errS.str().c_str(), BLACK, RED, true);
+        ChangeColour(errS.str().c_str(), DEFAULT_COLOR, RED_FOREGROUND, true);
         return false;
     }
     return true;
@@ -65,8 +65,8 @@ std::vector<int> FetchColumns(std::string table, std::string column)
     {
         ChangeColour(
             "ERROR: The names provided for the table and column are not correct",
-            BLACK,
-            RED,
+            DEFAULT_COLOR,
+            RED_FOREGROUND,
             true
         );
         exit(EXIT_FAILURE);

@@ -7,7 +7,7 @@
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 
-#include "w32_colour.h"
+#include "colour.h"
 #include "cxxopts.hpp"
 #include "SQLHandler.hpp"
 
@@ -31,7 +31,12 @@ int main(int argc, char** argv)
     // Terrible code for checking if user has entered enough arguments
     if (!argv[1] || argc < 13 && strcmp(argv[1], "-h") != 0 && strcmp(argv[1], "--help") != 0)
     {
-        ChangeColour("ERROR: Not enough arguments", BLACK, RED, true);
+        ChangeColour(
+            "ERROR: Not enough arguments",
+            DEFAULT_COLOR,
+            RED_FOREGROUND,
+            true
+        );
         std::cout << "See help (-h, --help) for correct usage\n";
         return EXIT_FAILURE;
     }
@@ -74,7 +79,7 @@ int main(int argc, char** argv)
     {
         std::stringstream optErr;
         optErr << "ERROR: " << e.what();
-        ChangeColour(optErr.str().c_str(), BLACK, RED, true);
+        ChangeColour(optErr.str().c_str(), DEFAULT_COLOR, RED_FOREGROUND, true);
         return EXIT_FAILURE;
     }
     
@@ -100,8 +105,8 @@ int main(int argc, char** argv)
     {
         ChangeColour(
             "WARNING: All outputs are zero, does provided column contain intergers?",
-            BLACK,
-            YELLOW,
+            DEFAULT_COLOR,
+            YELLOW_FOREGROUND,
             true
         );
     }

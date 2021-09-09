@@ -26,10 +26,10 @@
     <ClInclude Include="SQLHandler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="w32_colour.h">
+    <ClInclude Include="cxxopts.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cxxopts.hpp">
+    <ClInclude Include="colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

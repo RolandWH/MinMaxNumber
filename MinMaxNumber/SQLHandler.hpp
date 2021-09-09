@@ -1,4 +1,4 @@
-/* File:    SQLHandler.h
+/* File:    SQLHandler.hpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Contains functions for connecting to and reading from an SQL server
    License: GNU GPLv3 (../LICENSE)
