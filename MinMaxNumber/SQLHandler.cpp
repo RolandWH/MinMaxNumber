@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <cstdint>
 
 
 sql::Connection* con;
@@ -43,9 +44,9 @@ bool SQLConnect(std::string url, std::string user, std::string pass, std::string
 
 
 // Return numbers in a column into vector
-std::vector<int> FetchColumns(std::string table, std::string column)
+std::vector<int64_t> FetchColumns(std::string table, std::string column)
 {
-    std::vector<int> numList;
+    std::vector<int64_t> numList;
     sql::Statement* stmt;
     sql::ResultSet* res;
     stmt = con->createStatement();

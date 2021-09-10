@@ -25,7 +25,7 @@ C++ Program that returns the smallest and biggest number in an SQL Column
 - MinMaxNumber.cpp - This is the main file of the program, it contains code to parse command line arguments and is the central file from which functions inside ofther files are called. This file will be refered to as "main" from now on.
 - SQLHandler.cpp - This file contains functions to connect and communicate with the target MySQL server.
 - SQLHandler.hpp - This is just a header file for SQLHandler.cpp to allow main to call it's functions.
-- w32_colour.hpp - This is a header file I created for changing background and foreground console colours on Windows, this is used when I need to display a warning or error message.
+- colour.h - This is a header file I created for changing colours on ANSI/VT100 terminals, this is used when I need to display a warning or error message.
 
 
 ### How the goals were achived
@@ -104,14 +104,14 @@ Back in the main file we call the *SQLConnect* function, which is a boolean func
 <img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/incorrect_databse.png?raw=true"/>
 
 #### 3.
-`std::vector<int> numList = FetchColumns(table, column);`
+`std::vector<int64_t> numList = FetchColumns(table, column);`
 
 Back in main we create a vector to store the list of numbers returned by SQLHandler function `FetchColumns`. The numbers in the provided column is accessed by issuing the SQL statment: `SELECT column FROM table`, where column and table are replaced with the actual names. This query is issued by the `executeQuery` MySQL Connector function. Once all the numbers in the specified column have been recorded they are returned to main.
 
 #### 4 (i, ii).
 ```cpp
-int smallest = INT_MAX;
-int biggest = NULL;
+int64_t smallest = INT64_MAX;
+int64_t biggest = NULL;
 for (int i = 0; i < numList.size(); i++)
 {
     smallest = std::min(smallest, numList[i]);
@@ -122,8 +122,8 @@ To find the smallest and biggest numbers in the column we make use of the built 
 
 #### 4 (iii, iv).
 ```cpp
-int sum = std::accumulate(numList.begin(), numList.end(), 0);
-int avg = sum / numList.size();
+int64_t sum = std::accumulate(numList.begin(), numList.end(), (int64_t)0);
+int64_t avg = sum / numList.size();
 ```
 
 For this we use the C++ accumulate function which will sum up all the numbers in our list and return the result into our `sum` integer. Finally we find the average by dividing the sum of our numbers by the size of the list.

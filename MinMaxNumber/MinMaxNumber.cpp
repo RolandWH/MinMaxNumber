@@ -20,6 +20,7 @@
 
 #include <cstring>
 #include <cstdlib>
+#include <cstdint>
 #include <climits>
 #include <cstddef>
 
@@ -87,18 +88,18 @@ int main(int argc, char** argv)
     if (!SQLConnect(url, user, pass, db)) return EXIT_FAILURE;
 
     // If connection was sucessful fetch the numbers in the requested column
-    std::vector<int> numList = FetchColumns(table, column);
+    std::vector<int64_t> numList = FetchColumns(table, column);
 
     // Find smallest and biggest numbers in numList
-    int smallest = INT_MAX;
-    int biggest = NULL;
-    for (std::vector<int>::size_type i = 0; i < numList.size(); i++)
+    int64_t smallest = INT64_MAX;
+    int64_t biggest = NULL;
+    for (std::vector<int64_t>::size_type i = 0; i < numList.size(); i++)
     {
         smallest = std::min(smallest, numList[i]);
         biggest = std::max(biggest, numList[i]);
     }
-    int sum = std::accumulate(numList.begin(), numList.end(), 0);
-    std::vector<int>::size_type avg = sum / numList.size();
+    int64_t sum = std::accumulate(numList.begin(), numList.end(), (int64_t)0);
+    std::vector<int64_t>::size_type avg = sum / numList.size();
 
     // Output results
     if (!smallest && !biggest && !avg && !sum)

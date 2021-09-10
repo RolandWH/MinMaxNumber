@@ -7,9 +7,10 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
 // Connect to SQl server+database
 bool SQLConnect(std::string url, std::string user, std::string pass, std::string db);
 
 // Return numbers in a column into vector
-std::vector<int> FetchColumns(std::string table, std::string column);
+std::vector<int64_t> FetchColumns(std::string table, std::string column);
