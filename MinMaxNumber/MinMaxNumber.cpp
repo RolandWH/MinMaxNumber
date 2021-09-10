@@ -93,13 +93,14 @@ int main(int argc, char** argv)
     // Find smallest and biggest numbers in numList
     int64_t smallest = INT64_MAX;
     int64_t biggest = NULL;
+    int64_t sum = NULL;
     for (std::vector<int64_t>::size_type i = 0; i < numList.size(); i++)
     {
         smallest = std::min(smallest, numList[i]);
         biggest = std::max(biggest, numList[i]);
+        sum += numList[i];
     }
-    int64_t sum = std::accumulate(numList.begin(), numList.end(), (int64_t)0);
-    std::vector<int64_t>::size_type avg = sum / numList.size();
+    double avg = (double)sum / numList.size();
 
     // Output results
     if (!smallest && !biggest && !avg && !sum)
@@ -118,7 +119,14 @@ int main(int argc, char** argv)
     std::cout << "The total of all the numbers in your column is ";
     std::cout << sum << '\n';
     std::cout << "The average of all the numbers in your column is ";
-    std::cout << avg << '\n';
+    
+    std::string strAvg = std::to_string(avg);
+    strAvg = strAvg.substr(0, strAvg.find_last_not_of('0')+1);
+    if(strAvg.find('.') == strAvg.size()-1)
+    {
+        strAvg = strAvg.substr(0, strAvg.size()-1);
+    }
+    std::cout << strAvg << '\n';
 
     return EXIT_SUCCESS;
 }

@@ -108,28 +108,23 @@ Back in the main file we call the *SQLConnect* function, which is a boolean func
 
 Back in main we create a vector to store the list of numbers returned by SQLHandler function `FetchColumns`. The numbers in the provided column is accessed by issuing the SQL statment: `SELECT column FROM table`, where column and table are replaced with the actual names. This query is issued by the `executeQuery` MySQL Connector function. Once all the numbers in the specified column have been recorded they are returned to main.
 
-#### 4 (i, ii).
+#### 4 (i, ii, iii, iv).
 ```cpp
 int64_t smallest = INT64_MAX;
 int64_t biggest = NULL;
+int64_t sum = NULL;
 for (int i = 0; i < numList.size(); i++)
 {
     smallest = std::min(smallest, numList[i]);
     biggest = std::max(biggest, numList[i]);
+    sum += numList[i];
 }
+double avg = (double)sum / numList.size();
 ```
-To find the smallest and biggest numbers in the column we make use of the built in C++ functions `min` and `max`. Counterintuitively, we initally set the `smallest` variable to the biggest it can possibly be and `biggest` variable to the smallest it can possibly be. This is so that the smallest number in our actual list of numbers will definatally be smaller than the inital value of `smallest` and that the biggest number will always be bigger than the inital value of `biggest`. Next we loop through the numbers in our list compairing the current number to the previous smallest and biggest numbers. By the end of this looping we will be left with the smallest and biggest numbers in our column.
-
-#### 4 (iii, iv).
-```cpp
-int64_t sum = std::accumulate(numList.begin(), numList.end(), (int64_t)0);
-int64_t avg = sum / numList.size();
-```
-
-For this we use the C++ accumulate function which will sum up all the numbers in our list and return the result into our `sum` integer. Finally we find the average by dividing the sum of our numbers by the size of the list.
+To find the smallest and biggest numbers in the column we make use of the built in C++ functions `min` and `max`. Counterintuitively, we initally set the `smallest` variable to the biggest it can possibly be and `biggest` variable to the smallest it can possibly be. This is so that the smallest number in our actual list of numbers will definatally be smaller than the inital value of `smallest` and that the biggest number will always be bigger than the inital value of `biggest`. Next we loop through the numbers in our list compairing the current number to the previous smallest and biggest numbers. By the end of this looping we will be left with the smallest and biggest numbers in our column. In the same loop we add all our numbers together using the addition assignment operator. Finally we find the average by divinding the sum of our numbers by the size of the list. We cast `sum` to a `double` here in order to do floating point division instead of interger division.
 
 #### 4 (v).
-First of all, if all our previous calculations are zero then we display a warning about it, it may be that a column that does not contain integers has been provided by mistake. One by one we output the results of the calculations we performed earlier with an accompanying description. The output pictured below is what you recive when you run the program on the following table of Countries using the `Population` column:
+First of all, if all our previous calculations are zero then we display a warning about it, it may be that a column that does not contain integers has been provided by mistake. Next we remove trailing zeros from the average. Finally we output the results of the calculations we performed earlier with an accompanying description. The output pictured below is what you recive when you run the program on the following table of Countries using the `Population` column:
 
 | Country Name   | Population    |
 | -------------- | ------------- |
