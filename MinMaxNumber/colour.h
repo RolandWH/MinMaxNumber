@@ -24,7 +24,8 @@
  #define WHITE_BACKGROUND 47
 
 #ifdef _WIN32
-#include <Windows.h>
+    #define WIN32_LEAN_AND_MEAN
+    #include <Windows.h>
 #endif
 
 #include <stdbool.h>
@@ -50,11 +51,11 @@ static void ChangeColour(const char* msg, int bg, int fg, bool revert)
 {
     // Enable ANSI support on Windows
     #ifdef _WIN32
-        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-        DWORD dwMode = 0;
-        GetConsoleMode(hOut, &dwMode);
-        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-        SetConsoleMode(hOut, dwMode);
+      HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+      DWORD dwMode = 0;
+      GetConsoleMode(hOut, &dwMode);
+      dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+      SetConsoleMode(hOut, dwMode);
     #endif // _WIN32
 
     if (!bg)
