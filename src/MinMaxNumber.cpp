@@ -1,7 +1,7 @@
 /* File:    MinMaxNumber.cpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Returns the smallest and biggest number in an SQL column
-   License: GNU GPLv3 (../LICENSE) 
+   License: MIT License (../LICENSE)
 */
 
 #define NOMINMAX

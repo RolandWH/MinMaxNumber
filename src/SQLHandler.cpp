@@ -1,7 +1,7 @@
 /* File:    SQLHandler.cpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Contains functions for connecting to and reading from an SQL server
-   License: GNU GPLv3 (../LICENSE)
+   License: MIT License (../LICENSE)
 */
 
 #include "SQLHandler.hpp"

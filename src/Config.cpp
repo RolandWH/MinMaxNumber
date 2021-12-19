@@ -1,7 +1,7 @@
 /* File:    Config.cpp
    Author:  Roland Weir-Howell (r.weirhowell@gmail.com)
    Desc:    Contains functions for manging configuration data
-   License: GNU GPLv3 (../LICENSE)
+   License: MIT License (../LICENSE)
 */
 
 #include "Config.hpp"
