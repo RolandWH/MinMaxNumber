@@ -5,40 +5,77 @@
 */
 
 #define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 
-#include "colour.h"
+#include "Config.hpp"
+#include "ccolour/colour.h"
 #include "cxxopts.hpp"
 #include "SQLHandler.hpp"
 
+#include <filesystem>
 #include <string>
+#include <vector>
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include <algorithm>
-#include <numeric>
 
 #include <cstring>
 #include <cstdlib>
 #include <cstdint>
-#include <climits>
-#include <cstddef>
+
+#include <Windows.h>
+#include <lmcons.h>
 
 
 int main(int argc, char** argv)
 {
+    // Define path for config file and create directory
+    namespace fs = std::filesystem;
+    DWORD size = UNLEN + 1;
+    char username[UNLEN + 1];
+    GetUserNameA(username, &size);
+
+    const std::string path = "C:\\Users\\"
+        + (std::string)username
+        + "\\AppData\\Roaming\\MinMaxNumber\\config.ini";
+
+    fs::create_directory("C:\\Users\\"
+        + (std::string)username
+        + "\\AppData\\Roaming\\MinMaxNumber");
+
+    std::vector<std::string> configData;
     std::string url, user, pass, db, table, column;
- 
-    // Terrible code for checking if user has entered enough arguments
-    if (!argv[1] || argc < 13 && strcmp(argv[1], "-h") != 0 && strcmp(argv[1], "--help") != 0)
+    bool configExists = false, updateConfig = true;
+
+    if (DoesConfigExist(path))
     {
-        ChangeColour(
-            "ERROR: Not enough arguments",
-            DEFAULT_COLOR,
-            RED_FOREGROUND,
-            true
-        );
-        std::cout << "See help (-h, --help) for correct usage\n";
-        return EXIT_FAILURE;
+        configData = ReadConfig(path);
+
+        url    = configData[0];
+        user   = configData[1];
+        pass   = configData[2];
+        db     = configData[3];
+        table  = configData[4];
+        column = configData[5];
+
+        configExists = true;
+        updateConfig = false;
+    }
+
+    if (!configExists)
+    {
+        // Terrible code for checking if user has entered enough arguments
+        if (!argv[1] || argc < 13 && strcmp(argv[1], "-h") && strcmp(argv[1], "--help"))
+        {
+            ChangeColour(
+                "ERROR: Not enough arguments",
+                RED_FOREGROUND,
+                DEFAULT_COLOR,
+                true
+            );
+            std::cout << "See help (-h, --help) for correct usage\n";
+            return EXIT_FAILURE;
+        }
     }
 
     // Parse command line arguments and options using cxxopts
@@ -69,17 +106,39 @@ int main(int argc, char** argv)
             return EXIT_SUCCESS;
         }
 
-        url     = result["address"].as<std::string>();
-        user    = result["user"].as<std::string>();
-        pass    = result["password"].as<std::string>();
-        db      = result["database"].as<std::string>();
-        table   = result["table"].as<std::string>();
-        column  = result["column"].as<std::string>();
-    } catch (const cxxopts::OptionException& e)
+        if (result.count("address")) url = result["address"].as<std::string>();
+        if (result.count("user")) user = result["user"].as<std::string>();
+        if (result.count("pass")) pass = result["password"].as<std::string>();
+        if (result.count("database")) db = result["database"].as<std::string>();
+        if (result.count("table")) table = result["table"].as<std::string>();
+        if (result.count("column")) column = result["column"].as<std::string>();
+
+        const std::string cmdArgs[6] = {
+            "address",
+            "user",
+            "pass",
+            "database",
+            "table",
+            "column"
+        };
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (result.count(cmdArgs[i]))
+            {
+                if (result[cmdArgs[i]].as<std::string>() != configData[i])
+                {
+                    configData[i] = result[cmdArgs[i]].as<std::string>();
+                    updateConfig = true;
+                }
+            }
+        }
+    }
+    catch (const cxxopts::OptionException& e)
     {
         std::stringstream optErr;
         optErr << "ERROR: " << e.what();
-        ChangeColour(optErr.str().c_str(), DEFAULT_COLOR, RED_FOREGROUND, true);
+        ChangeColour(optErr.str().c_str(), RED_FOREGROUND, DEFAULT_COLOR, true);
         return EXIT_FAILURE;
     }
     
@@ -90,8 +149,8 @@ int main(int argc, char** argv)
     std::vector<int64_t> numList = FetchColumns(table, column);
 
     // Find smallest and biggest numbers in numList
-    int64_t smallest = INT64_MAX;
-    int64_t biggest = NULL;
+    int64_t smallest = numList[0];
+    int64_t biggest = numList[0];
     int64_t sum = NULL;
     for (std::vector<int64_t>::size_type i = 0; i < numList.size(); i++)
     {
@@ -106,8 +165,8 @@ int main(int argc, char** argv)
     {
         ChangeColour(
             "WARNING: All outputs are zero, does provided column contain intergers?",
-            DEFAULT_COLOR,
             YELLOW_FOREGROUND,
+            DEFAULT_COLOR,
             true
         );
     }
@@ -119,6 +178,7 @@ int main(int argc, char** argv)
     std::cout << sum << '\n';
     std::cout << "The average of all the numbers in your column is ";
     
+    // Code to remove trailing zeros
     std::string strAvg = std::to_string(avg);
     strAvg = strAvg.substr(0, strAvg.find_last_not_of('0')+1);
     if(strAvg.find('.') == strAvg.size()-1)
@@ -126,6 +186,26 @@ int main(int argc, char** argv)
         strAvg = strAvg.substr(0, strAvg.size()-1);
     }
     std::cout << strAvg << '\n';
+
+    if (updateConfig)
+    {
+        std::string choice;
+        std::cout << "Do you want to save your settings? [Y/N] ";
+        std::cin >> choice;
+
+        if (choice == "Y" || choice == "y")
+        {
+            if (!WriteConfig(configData, path))
+            {
+                ChangeColour(
+                    "ERROR: Failed to write to configuration file",
+                    RED_FOREGROUND,
+                    DEFAULT_COLOR,
+                    true
+                );
+            }
+        }
+    }
 
     return EXIT_SUCCESS;
 }

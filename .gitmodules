@@ -1,0 +1,3 @@
+[submodule "src/ccolour"]
+	path = src/ccolour
+	url = https://github.com/RolandWH/ccolour

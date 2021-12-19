@@ -15,11 +15,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -31,7 +29,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)out\</OutDir>
+    <IntDir>$(SolutionDir)out\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -57,13 +56,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MinMaxNumber.cpp" />
-    <ClCompile Include="SQLHandler.cpp" />
+    <ClCompile Include="src\Config.cpp" />
+    <ClCompile Include="src\ini.c" />
+    <ClCompile Include="src\INIReader.cpp" />
+    <ClCompile Include="src\MinMaxNumber.cpp" />
+    <ClCompile Include="src\SQLHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="colour.h" />
-    <ClInclude Include="cxxopts.hpp" />
-    <ClInclude Include="SQLHandler.hpp" />
+    <ClInclude Include="src\ccolour\colour.h" />
+    <ClInclude Include="src\Config.hpp" />
+    <ClInclude Include="src\cxxopts.hpp" />
+    <ClInclude Include="src\ini.h" />
+    <ClInclude Include="src\INIReader.h" />
+    <ClInclude Include="src\SQLHandler.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

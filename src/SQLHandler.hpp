@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdint>
 
+
 // Connect to SQl server+database
 bool SQLConnect(std::string url, std::string user, std::string pass, std::string db);
 
