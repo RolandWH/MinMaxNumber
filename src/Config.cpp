@@ -5,7 +5,7 @@
 */
 
 #include "Config.hpp"
-#include "INIReader.h"
+#include "inih/cpp/INIReader.h"
 #include "ccolour/colour.h"
 
 #include <string>

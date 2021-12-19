@@ -1,3 +1,6 @@
 [submodule "src/ccolour"]
 	path = src/ccolour
 	url = https://github.com/RolandWH/ccolour
+[submodule "src/inih"]
+	path = src/inih
+	url = https://github.com/benhoyt/inih

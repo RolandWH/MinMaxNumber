@@ -4,24 +4,21 @@
     <ClCompile Include="src\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ini.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\INIReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\SQLHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MinMaxNumber.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\inih\cpp\INIReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inih\ini.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cxxopts.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\INIReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SQLHandler.hpp">
@@ -30,10 +27,13 @@
     <ClInclude Include="src\Config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ini.h">
+    <ClInclude Include="src\ccolour\colour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ccolour\colour.h">
+    <ClInclude Include="src\inih\ini.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inih\cpp\INIReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
