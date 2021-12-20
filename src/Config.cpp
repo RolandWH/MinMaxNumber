@@ -12,6 +12,9 @@
 #include <fstream>
 #include <iostream>
 
+#include <cstdio>
+#include <cstdlib>
+
 
 bool DoesConfigExist(std::string path)
 {
@@ -28,6 +31,7 @@ bool WriteConfig(std::vector<std::string> configData, std::string path)
     if (!config.good()) return false;
 
     config << "[auth]" << '\n'
+        << "config_exists=true\n"
         << "ip=" << configData[0] << '\n'
         << "user=" << configData[1] << '\n'
         << "pass=" << configData[2] << '\n'
@@ -50,6 +54,19 @@ std::vector<std::string> ReadConfig(std::string path)
     {
         ChangeColour(
             "ERROR: Cannot open configuration file",
+            RED_FOREGROUND,
+            DEFAULT_COLOR,
+            true
+        );
+        exit(EXIT_FAILURE);
+    }
+
+    if (!config.GetBoolean("auth", "config_exists", false))
+    {
+        remove(path.c_str());
+
+        ChangeColour(
+            "ERROR: The config file exists but is empty or corrupt, please restart the app",
             RED_FOREGROUND,
             DEFAULT_COLOR,
             true

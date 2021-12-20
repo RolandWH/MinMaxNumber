@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         if (!argv[1] || argc < 13 && strcmp(argv[1], "-h") && strcmp(argv[1], "--help"))
         {
             ChangeColour(
-                "ERROR: Not enough arguments",
+                "ERROR: Not enough arguments\n",
                 RED_FOREGROUND,
                 DEFAULT_COLOR,
                 true
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 
         if (result.count("address")) url = result["address"].as<std::string>();
         if (result.count("user")) user = result["user"].as<std::string>();
-        if (result.count("pass")) pass = result["password"].as<std::string>();
+        if (result.count("password")) pass = result["password"].as<std::string>();
         if (result.count("database")) db = result["database"].as<std::string>();
         if (result.count("table")) table = result["table"].as<std::string>();
         if (result.count("column")) column = result["column"].as<std::string>();
@@ -116,21 +116,31 @@ int main(int argc, char** argv)
         const std::string cmdArgs[6] = {
             "address",
             "user",
-            "pass",
+            "password",
             "database",
             "table",
             "column"
         };
 
-        for (int i = 0; i < 6; i++)
+        if (configExists)
         {
-            if (result.count(cmdArgs[i]))
+            for (int i = 0; i < 6; i++)
             {
-                if (result[cmdArgs[i]].as<std::string>() != configData[i])
+                if (result.count(cmdArgs[i]))
                 {
-                    configData[i] = result[cmdArgs[i]].as<std::string>();
-                    updateConfig = true;
+                    if (result[cmdArgs[i]].as<std::string>() != configData[i])
+                    {
+                        configData[i] = result[cmdArgs[i]].as<std::string>();
+                        updateConfig = true;
+                    }
                 }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                configData.push_back(result[cmdArgs[i]].as<std::string>());
             }
         }
     }
