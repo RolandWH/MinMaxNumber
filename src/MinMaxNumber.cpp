@@ -9,7 +9,7 @@
 
 #include "Config.hpp"
 #include "ccolour/colour.h"
-#include "cxxopts.hpp"
+#include "cxxopts/include/cxxopts.hpp"
 #include "SQLHandler.hpp"
 
 #include <filesystem>

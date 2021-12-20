@@ -4,3 +4,6 @@
 [submodule "src/inih"]
 	path = src/inih
 	url = https://github.com/benhoyt/inih
+[submodule "src/cxxopts"]
+	path = src/cxxopts
+	url = https://github.com/jarro2783/cxxopts
