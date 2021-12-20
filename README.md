@@ -18,11 +18,14 @@ C++ Program that returns the smallest and biggest number in an SQL Column
    4. The average of all the numbers in the column ✔
    5. Display the results ✔
 5. Match the number displayed with a name if applicable ❌
-6. Read MySQL connection details from a config file ❌
+6. Read MySQL connection details from a config file ✔
+7. Add unix/linux support ❌
 
 
 ### Structure of the program
 - MinMaxNumber.cpp - This is the main file of the program, it contains code to parse command line arguments and is the central file from which functions inside other files are called. This file will be referred to as "main" from now on.
+- Config.cpp - This file handles reading and writing to a configuration file to store user settings
+- Config.hpp - This is just a header file for Config.cpp to allow main to call it's functions.
 - SQLHandler.cpp - This file contains functions to connect and communicate with the target MySQL server.
 - SQLHandler.hpp - This is just a header file for SQLHandler.cpp to allow main to call it's functions.
 - colour.h - This is a header file I created for changing colours on ANSI/VT100 terminals, this is used when I need to display a warning or error message.
@@ -136,3 +139,9 @@ First of all, if all our previous calculations are zero then we display a warnin
 
 <img src="https://github.com/RolandWH/MinMaxNumber/raw/master/img/population_output.png?raw=true"/>
 
+#### 6.
+For managing a configuration file we use the *Config.cpp* file. It contains three functions: one for checking if the config file already exists, a second for reading from the file (using [inih](https://github.com/benhoyt/inih)) and a third for writing to the file.
+
+The path for the config file is inside the current user's AppData\Roaming directory, the username is obtained using the Windows *GetUserNameA* function.
+
+If the config file already exists then the values in it are used to connect to the database, if the file dosen't exist then the user has to enter arguments on the command line as normal, but once the program has finished running the user will be prompted to save the changes to a config file. This same prompt will appear if arguments are entered that differ from the ones in the config file. 
