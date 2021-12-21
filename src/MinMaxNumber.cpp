@@ -113,6 +113,10 @@ int main(int argc, char** argv)
         if (result.count("table")) table = result["table"].as<std::string>();
         if (result.count("column")) column = result["column"].as<std::string>();
 
+        /* Using localhost creates HUGE delay, see:
+        https://stackoverflow.com/a/15436435/15568597 */
+        if (url == "localhost") url = "127.0.0.1";
+
         const std::string cmdArgs[6] = {
             "address",
             "user",
@@ -174,7 +178,7 @@ int main(int argc, char** argv)
     if (!smallest && !biggest && !avg && !sum)
     {
         ChangeColour(
-            "WARNING: All outputs are zero, does provided column contain intergers?",
+            "WARNING: All outputs are zero, does provided column contain intergers?\n",
             YELLOW_FOREGROUND,
             DEFAULT_COLOR,
             true
