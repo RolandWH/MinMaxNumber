@@ -19,7 +19,7 @@ C++ Program that returns the smallest and biggest number in an SQL Column
    5. Display the results ✔
 5. Match the number displayed with a name if applicable ❌
 6. Read MySQL connection details from a config file ✔
-7. Add unix/linux support ❌
+7. Add unix/linux support ✔
 
 
 ### Structure of the program
@@ -92,9 +92,9 @@ We use a cxxopts function to check whether the help page was requested by the us
 #### 2.
 For this part of the program we switch to using the separate *SQLHandler.cpp* file. It contains two functions: one for connecting to the database and another for returning the numbers contained in a specified column.
 
-`#include <mysql/jdbc.h>`
+`#include <mysql.h>`
 
-For connecting to the database I am using the [mysql-connector-cpp](https://github.com/mysql/mysql-connector-cpp) library. People who are familiar with this library might notice that I am using the legacy header file and not the more modern one, this is simply because there was much more documentation available for the legacy one, besides this program is performing such a simple SQL task that it does not particularly matter what implementation is used.
+For connecting to the database I am using the [mysql-server](https://github.com/mysql/mysql-server) C API.
 
 ```cpp
 // main file
@@ -144,4 +144,7 @@ For managing a configuration file we use the *Config.cpp* file. It contains thre
 
 The path for the config file is inside the current user's AppData\Roaming directory, the username is obtained using the Windows *GetUserNameA* function.
 
-If the config file already exists then the values in it are used to connect to the database, if the file dosen't exist then the user has to enter arguments on the command line as normal, but once the program has finished running the user will be prompted to save the changes to a config file. This same prompt will appear if arguments are entered that differ from the ones in the config file. 
+If the config file already exists then the values in it are used to connect to the database, if the file dosen't exist then the user has to enter arguments on the command line as normal, but once the program has finished running the user will be prompted to save the changes to a config file. This same prompt will appear if arguments are entered that differ from the ones in the config file.
+
+#### 7.
+Previously I was using the [mysql-connector-cpp](https://github.com/mysql/mysql-connector-cpp) library but I could not get it to sucsesfully compile for linux, after switching to the more standard C API I could compile. The only non SQL related code change needed for linux compatibility was changing where the configuration file was stored.

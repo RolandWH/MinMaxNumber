@@ -5,7 +5,7 @@
 */
 
 #include "SQLHandler.hpp"
-#include "mysql/jdbc.h"
+#include "mysql.h"
 #include "ccolour/colour.h"
 
 #include <string>
@@ -15,31 +15,24 @@
 #include <cstdlib>
 
 
-sql::Connection* con;
+MYSQL* conn;
 
 // Connect to SQl server+database
 bool SQLConnect(std::string url, std::string user, std::string pass, std::string db)
 {
-    try
-    {
-        sql::Driver* driver = get_driver_instance();
-        con = driver->connect(url, user, pass);
-        con->setSchema(db);
-    } catch (sql::SQLException &err)
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, url.c_str(), user.c_str(), pass.c_str(),
+        db.c_str(), 3306, NULL, 0))
     {
         // Error handling
         std::stringstream errS;
-        errS << "ERROR: " << err.what();
-        errS << " (MySQL error code: " << err.getErrorCode();
-        if (err.getSQLState() != "")
-        {
-            errS << ", SQLState: " << err.getSQLState() << ")";
-        }
-        else errS << ')';
-        
+        errS << "ERROR: " << mysql_error(conn)
+            << " (MySQL error code: " << mysql_errno(conn) << ")\n";
+
         ChangeColour(errS.str().c_str(), RED_FOREGROUND, DEFAULT_COLOR, true);
         return false;
     }
+
     return true;
 }
 
@@ -48,33 +41,30 @@ bool SQLConnect(std::string url, std::string user, std::string pass, std::string
 std::vector<int64_t> FetchColumns(std::string table, std::string column)
 {
     std::vector<int64_t> numList;
-    sql::Statement* stmt;
-    sql::ResultSet* res;
-    stmt = con->createStatement();
+    MYSQL_RES* res;
+    MYSQL_ROW row;
     std::stringstream queryString;
     queryString << "SELECT " << column << " FROM " << table;
 
-    try
-    {
-        res = stmt->executeQuery(queryString.str());
-        while (res->next())
-        {
-            numList.push_back(res->getInt(1));
-        }
-        delete res;
-    }
-    catch (const sql::SQLException&)
+    if (mysql_query(conn, queryString.str().c_str()))
     {
         ChangeColour(
-            "ERROR: The names provided for the table and column are not correct",
+            "ERROR: The names provided for the table and column are not correct\n",
             RED_FOREGROUND,
             DEFAULT_COLOR,
             true
         );
         exit(EXIT_FAILURE);
     }
+    res = mysql_store_result(conn);
 
-    delete stmt;
-    delete con;
+    while (row = mysql_fetch_row(res))
+    {
+        numList.push_back(strtoll(row[0], NULL, 10));
+    }
+
+    mysql_free_result(res);
+    mysql_close(conn);
+
     return numList;
 }
