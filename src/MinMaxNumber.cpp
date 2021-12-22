@@ -23,14 +23,18 @@
 #include <cstdlib>
 #include <cstdint>
 
+#ifdef _WIN64
 #include <Windows.h>
 #include <lmcons.h>
+#endif // _WIN64
 
 
 int main(int argc, char** argv)
 {
     // Define path for config file and create directory
     namespace fs = std::filesystem;
+
+    #ifdef _WIN32
     DWORD size = UNLEN + 1;
     char username[UNLEN + 1];
     GetUserNameA(username, &size);
@@ -42,6 +46,14 @@ int main(int argc, char** argv)
     fs::create_directory("C:\\Users\\"
         + (std::string)username
         + "\\AppData\\Roaming\\MinMaxNumber");
+    #endif // _WIN32
+
+    #ifdef __linux__
+    std::string homeDir = getenv("HOME");
+    const std::string path = homeDir + "/.config/MinMaxNumber/config.ini";
+    fs::create_directory(homeDir + "/.config");
+    fs::create_directory(homeDir + "/.config/MinMaxNumber");
+    #endif // linux
 
     std::vector<std::string> configData;
     std::string url, user, pass, db, table, column;
