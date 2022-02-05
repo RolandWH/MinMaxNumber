@@ -167,7 +167,7 @@ int main(int argc, char** argv)
         ChangeColour(optErr.str().c_str(), RED_FOREGROUND, DEFAULT_COLOR, true);
         return EXIT_FAILURE;
     }
-    
+
     // Try and connect to MySQL server using details user provided
     if (!SQLConnect(url, user, pass, db)) return EXIT_FAILURE;
 
@@ -203,7 +203,7 @@ int main(int argc, char** argv)
     std::cout << "The total of all the numbers in your column is ";
     std::cout << sum << '\n';
     std::cout << "The average of all the numbers in your column is ";
-    
+
     // Code to remove trailing zeros
     std::string strAvg = std::to_string(avg);
     strAvg = strAvg.substr(0, strAvg.find_last_not_of('0')+1);

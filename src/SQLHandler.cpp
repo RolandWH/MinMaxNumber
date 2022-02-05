@@ -5,12 +5,14 @@
 */
 
 #include "SQLHandler.hpp"
-#include "mysql.h"
 #include "ccolour/colour.h"
+
+#include <mysql.h>
 
 #include <string>
 #include <sstream>
 #include <vector>
+
 #include <cstdint>
 #include <cstdlib>
 
